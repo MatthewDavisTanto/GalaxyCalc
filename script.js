@@ -1,232 +1,273 @@
 const canvas = document.getElementById("galaxy");
-const ctx = canvas.getContext("2d");
 
-const expressionDisplay =
-    document.getElementById("expression");
+const scene = new THREE.Scene();
 
-const resultDisplay =
-    document.getElementById("result");
+const parameters = {
+    count: 60000,
+    size: 0.02,
+    radius: 5,
+    branches: 3,
+    spin: 1,
+    randomness: 0.2,
+    randomnessPower: 3,
+    insideColor: "#eb3700",
+    outsideColor: "#4dbbcc"
+};
 
-const errorMessage =
-    document.getElementById("error-message");
+let geometry = null;
+let material = null;
+let points = null;
 
-const buttons =
-    document.querySelectorAll(".buttons button");
+function generateGalaxy() {
 
-let expression = "";
+    if (points !== null) {
+        geometry.dispose();
+        material.dispose();
+        scene.remove(points);
+    }
 
-let particles = [];
+    geometry = new THREE.BufferGeometry();
 
-let width = 0;
-let height = 0;
-let centerX = 0;
-let centerY = 0;
+    const positions =
+        new Float32Array(
+            parameters.count * 3
+        );
 
-function resizeCanvas() {
-    const ratio =
-        Math.min(window.devicePixelRatio, 2);
+    const colors =
+        new Float32Array(
+            parameters.count * 3
+        );
 
-    width = window.innerWidth;
-    height = window.innerHeight;
+    const colorInside =
+        new THREE.Color(
+            parameters.insideColor
+        );
 
-    canvas.width =
-        width * ratio;
+    const colorOutside =
+        new THREE.Color(
+            parameters.outsideColor
+        );
 
-    canvas.height =
-        height * ratio;
+    for (
+        let i = 0;
+        i < parameters.count;
+        i++
+    ) {
 
-    canvas.style.width =
-        `${width}px`;
-
-    canvas.style.height =
-        `${height}px`;
-
-    ctx.setTransform(
-        ratio,
-        0,
-        0,
-        ratio,
-        0,
-        0
-    );
-
-    centerX = width / 2;
-    centerY = height / 2;
-
-    createGalaxy();
-}
-
-function createGalaxy() {
-    particles = [];
-
-    const count =
-        width < 700
-            ? 650
-            : 1200;
-
-    for (let i = 0; i < count; i++) {
-
-        const arm =
-            i % 4;
+        const i3 = i * 3;
 
         const radius =
             Math.random() *
-            Math.min(width, height) *
-            0.48;
+            parameters.radius;
 
-        const angle =
-            Math.random() *
+        const spinAngle =
+            radius *
+            parameters.spin;
+
+        const branchAngle =
+            (i % parameters.branches) /
+            parameters.branches *
             Math.PI * 2;
 
-        const spiral =
-            radius * 0.018;
+        const randomY =
+            Math.pow(
+                Math.random(),
+                parameters.randomnessPower
+            ) *
+            (
+                Math.random() < 0.5
+                    ? 1
+                    : -1
+            );
 
-        particles.push({
-            radius,
-            angle:
-                angle +
-                arm *
-                (Math.PI * 2 / 4) +
-                spiral,
+        const randomZ =
+            Math.pow(
+                Math.random(),
+                parameters.randomnessPower
+            ) *
+            (
+                Math.random() < 0.5
+                    ? 1
+                    : -1
+            );
 
-            arm,
-            size:
-                Math.random() * 1.8 + 0.4,
+        const randomX =
+            Math.pow(
+                Math.random(),
+                parameters.randomnessPower
+            ) *
+            (
+                Math.random() < 0.5
+                    ? 1
+                    : -1
+            );
 
-            alpha:
-                Math.random() * 0.65 + 0.2,
+        positions[i3] =
+            Math.cos(
+                branchAngle +
+                spinAngle
+            ) *
+            radius +
+            randomX;
 
-            speed:
-                Math.random() *
-                0.0009 + 0.00025,
+        positions[i3 + 1] =
+            randomY;
 
-            hue:
-                175 +
-                Math.random() * 90,
+        positions[i3 + 2] =
+            Math.sin(
+                branchAngle +
+                spinAngle
+            ) *
+            radius +
+            randomZ;
 
-            depth:
-                Math.random() * 0.65 + 0.35
-        });
+        const mixedColor =
+            colorInside.clone();
+
+        mixedColor.lerp(
+            colorOutside,
+            radius /
+            parameters.radius
+        );
+
+        colors[i3] =
+            mixedColor.r;
+
+        colors[i3 + 1] =
+            mixedColor.g;
+
+        colors[i3 + 2] =
+            mixedColor.b;
     }
+
+    geometry.setAttribute(
+        "position",
+        new THREE.BufferAttribute(
+            positions,
+            3
+        )
+    );
+
+    geometry.setAttribute(
+        "color",
+        new THREE.BufferAttribute(
+            colors,
+            3
+        )
+    );
+
+    material =
+        new THREE.PointsMaterial({
+            size: parameters.size,
+            sizeAttenuation: true,
+            depthWrite: false,
+            blending: THREE.AdditiveBlending,
+            vertexColors: true
+        });
+
+    points =
+        new THREE.Points(
+            geometry,
+            material
+        );
+
+    scene.add(points);
 }
 
-function drawGalaxy() {
-    ctx.clearRect(
-        0,
-        0,
-        width,
-        height
+generateGalaxy();
+
+const sizes = {
+    width: window.innerWidth,
+    height: window.innerHeight
+};
+
+const camera =
+    new THREE.PerspectiveCamera(
+        52,
+        sizes.width / sizes.height,
+        0.1,
+        100
     );
 
-    const glow =
-        ctx.createRadialGradient(
-            centerX,
-            centerY,
-            0,
-            centerX,
-            centerY,
-            Math.min(width, height) * 0.42
-        );
+camera.position.set(
+    3,
+    1.5,
+    3
+);
 
-    glow.addColorStop(
-        0,
-        "rgba(255,255,255,0.95)"
-    );
+scene.add(camera);
 
-    glow.addColorStop(
-        0.22,
-        "rgba(185,245,255,0.5)"
-    );
-
-    glow.addColorStop(
-        0.55,
-        "rgba(205,185,255,0.18)"
-    );
-
-    glow.addColorStop(
-        1,
-        "rgba(255,255,255,0)"
-    );
-
-    ctx.fillStyle = glow;
-
-    ctx.fillRect(
-        0,
-        0,
-        width,
-        height
-    );
-
-    ctx.globalCompositeOperation =
-        "lighter";
-
-    particles.forEach((particle) => {
-
-        particle.angle +=
-            particle.speed *
-            particle.depth;
-
-        const armOffset =
-            Math.sin(
-                particle.radius * 0.018
-            ) * 0.75;
-
-        const angle =
-            particle.angle +
-            armOffset;
-
-        const spread =
-            Math.sin(
-                particle.radius * 0.012 +
-                particle.arm
-            ) * 12;
-
-        const x =
-            centerX +
-            Math.cos(angle) *
-            particle.radius +
-            spread;
-
-        const y =
-            centerY +
-            Math.sin(angle) *
-            particle.radius *
-            0.48 +
-            spread * 0.35;
-
-        const color =
-            `hsla(${particle.hue}, 85%, 66%, ${particle.alpha})`;
-
-        ctx.beginPath();
-
-        ctx.fillStyle = color;
-
-        ctx.arc(
-            x,
-            y,
-            particle.size,
-            0,
-            Math.PI * 2
-        );
-
-        ctx.fill();
+const renderer =
+    new THREE.WebGLRenderer({
+        canvas: canvas,
+        alpha: true,
+        antialias: true
     });
 
-    ctx.globalCompositeOperation =
-        "source-over";
+renderer.setSize(
+    sizes.width,
+    sizes.height
+);
 
-    requestAnimationFrame(
-        drawGalaxy
-    );
-}
+renderer.setPixelRatio(
+    Math.min(
+        window.devicePixelRatio,
+        2
+    )
+);
 
 window.addEventListener(
     "resize",
-    resizeCanvas
+    () => {
+
+        sizes.width =
+            window.innerWidth;
+
+        sizes.height =
+            window.innerHeight;
+
+        camera.aspect =
+            sizes.width /
+            sizes.height;
+
+        camera.updateProjectionMatrix();
+
+        renderer.setSize(
+            sizes.width,
+            sizes.height
+        );
+
+        renderer.setPixelRatio(
+            Math.min(
+                window.devicePixelRatio,
+                2
+            )
+        );
+    }
 );
 
-resizeCanvas();
-drawGalaxy();
+const clock =
+    new THREE.Clock();
+
+function animateGalaxy() {
+
+    const elapsedTime =
+        clock.getElapsedTime();
+
+    points.rotation.y =
+        elapsedTime * 0.05;
+
+    renderer.render(
+        scene,
+        camera
+    );
+
+    requestAnimationFrame(
+        animateGalaxy
+    );
+}
+
+animateGalaxy();
 
 function updateDisplay() {
     expressionDisplay.textContent =
