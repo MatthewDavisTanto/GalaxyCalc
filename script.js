@@ -1,18 +1,22 @@
 const canvas = document.getElementById("galaxy");
 
-const expressionDisplay =
-    document.getElementById("expression");
+const birthDateInput =
+    document.getElementById("birth-date");
+
+const planetSelect =
+    document.getElementById("planet");
+
+const calculateButton =
+    document.getElementById("calculate-button");
 
 const resultDisplay =
     document.getElementById("result");
 
+const resultDescription =
+    document.getElementById("result-description");
+
 const errorMessage =
     document.getElementById("error-message");
-
-const buttons =
-    document.querySelectorAll(".buttons button");
-
-let expression = "";
 
 const scene = new THREE.Scene();
 
@@ -198,7 +202,8 @@ const sizes = {
 const camera =
     new THREE.PerspectiveCamera(
         52,
-        sizes.width / sizes.height,
+        sizes.width /
+        sizes.height,
         0.1,
         100
     );
@@ -209,7 +214,11 @@ camera.position.set(
     3
 );
 
-camera.lookAt(0, 0, 0);
+camera.lookAt(
+    0,
+    0,
+    0
+);
 
 scene.add(camera);
 
@@ -285,377 +294,109 @@ function animateGalaxy() {
 
 animateGalaxy();
 
-function updateDisplay() {
-    expressionDisplay.textContent =
-        expression;
-}
+const planetYears = {
+    earth: 1,
+    mercury: 0.2408467,
+    venus: 0.61519726,
+    mars: 1.8808158,
+    jupiter: 11.862615,
+    saturn: 29.447498,
+    uranus: 84.016846,
+    neptune: 164.79132
+};
 
-function clearCalculator() {
-    expression = "";
+const planetNames = {
+    earth: "Earth",
+    mercury: "Mercury",
+    venus: "Venus",
+    mars: "Mars",
+    jupiter: "Jupiter",
+    saturn: "Saturn",
+    uranus: "Uranus",
+    neptune: "Neptune"
+};
 
-    expressionDisplay.textContent = "";
-
-    resultDisplay.textContent = "0";
+function calculateAge() {
 
     errorMessage.textContent = "";
-}
 
-function deleteLast() {
-    expression =
-        expression.slice(0, -1);
+    const birthDate =
+        birthDateInput.value;
 
-    errorMessage.textContent = "";
+    const planet =
+        planetSelect.value;
 
-    updateDisplay();
-}
+    if (!birthDate) {
 
-function addValue(value) {
-    errorMessage.textContent = "";
-
-    const operators =
-        ["+", "-", "×", "÷"];
-
-    if (operators.includes(value)) {
-
-        if (expression === "") {
-
-            if (value !== "-") {
-                return;
-            }
-        }
-
-        const last =
-            expression.slice(-1);
-
-        if (operators.includes(last)) {
-            expression =
-                expression.slice(0, -1) +
-                value;
-        } else {
-            expression += value;
-        }
-
-        updateDisplay();
+        errorMessage.textContent =
+            "Please enter your date of birth.";
 
         return;
     }
 
-    if (value === ".") {
+    if (!planet) {
 
-        const currentNumber =
-            expression.split(/[+\-×÷]/).pop();
-
-        if (currentNumber.includes(".")) {
-            return;
-        }
-
-        if (
-            currentNumber === "" ||
-            operators.includes(
-                expression.slice(-1)
-            )
-        ) {
-            expression += "0.";
-        } else {
-            expression += ".";
-        }
-
-        updateDisplay();
+        errorMessage.textContent =
+            "Please select a planet.";
 
         return;
     }
 
-    expression += value;
-
-    updateDisplay();
-}
-
-function calculatePercent() {
-
-    if (expression === "") {
-        return;
-    }
-
-    const match =
-        expression.match(
-            /(\d*\.?\d+)$/
+    const birth =
+        new Date(
+            `${birthDate}T00:00:00`
         );
 
-    if (!match) {
+    const today =
+        new Date();
+
+    if (
+        Number.isNaN(
+            birth.getTime()
+        )
+    ) {
+
+        errorMessage.textContent =
+            "Please enter a valid date.";
+
         return;
     }
 
-    const value =
-        Number(match[0]) / 100;
+    if (birth > today) {
 
-    expression =
-        expression.slice(
-            0,
-            -match[0].length
-        ) +
-        value;
+        errorMessage.textContent =
+            "Date of birth cannot be in the future.";
 
-    updateDisplay();
+        return;
+    }
+
+    const difference =
+        today.getTime() -
+        birth.getTime();
+
+    const days =
+        difference /
+        (1000 * 60 * 60 * 24);
+
+    const earthAge =
+        days /
+        365.2425;
+
+    const galacticAge =
+        earthAge /
+        planetYears[planet];
+
+    const roundedAge =
+        galacticAge.toFixed(2);
+
+    resultDisplay.textContent =
+        `${roundedAge} years`;
+
+    resultDescription.textContent =
+        `You are ${roundedAge} years old on ${planetNames[planet]}.`;
 }
 
-function calculate() {
-
-    errorMessage.textContent = "";
-
-    if (expression === "") {
-
-        errorMessage.textContent =
-            "Enter a calculation.";
-
-        return;
-    }
-
-    if (
-        /[+\-×÷.]$/.test(expression)
-    ) {
-
-        errorMessage.textContent =
-            "Complete the calculation.";
-
-        return;
-    }
-
-    if (
-        expression.startsWith("-")
-    ) {
-
-        errorMessage.textContent =
-            "Invalid calculation.";
-
-        return;
-    }
-
-    const normalized =
-        expression
-            .replace(/×/g, "*")
-            .replace(/÷/g, "/");
-
-    if (
-        !/^[0-9+\-*/.]+$/.test(normalized)
-    ) {
-
-        errorMessage.textContent =
-            "Invalid input.";
-
-        return;
-    }
-
-    if (
-        normalized.includes("/0") &&
-        /\/0+(?:\.0*)?$/.test(normalized)
-    ) {
-
-        errorMessage.textContent =
-            "Cannot divide by zero.";
-
-        return;
-    }
-
-    try {
-
-        const tokens =
-            normalized.match(
-                /\d*\.?\d+|[+\-*/]/g
-            );
-
-        if (!tokens) {
-            throw new Error();
-        }
-
-        let values = [];
-        let operators = [];
-
-        function applyOperation() {
-
-            const operator =
-                operators.pop();
-
-            const right =
-                values.pop();
-
-            const left =
-                values.pop();
-
-            let result;
-
-            if (operator === "+") {
-                result = left + right;
-            }
-
-            if (operator === "-") {
-                result = left - right;
-            }
-
-            if (operator === "*") {
-                result = left * right;
-            }
-
-            if (operator === "/") {
-
-                if (right === 0) {
-                    throw new Error();
-                }
-
-                result =
-                    left / right;
-            }
-
-            values.push(result);
-        }
-
-        function precedence(operator) {
-
-            if (
-                operator === "*" ||
-                operator === "/"
-            ) {
-                return 2;
-            }
-
-            return 1;
-        }
-
-        for (let i = 0; i < tokens.length; i++) {
-
-            const token = tokens[i];
-
-            if (!isNaN(token)) {
-
-                values.push(
-                    Number(token)
-                );
-
-                continue;
-            }
-
-            while (
-                operators.length &&
-                precedence(
-                    operators[
-                        operators.length - 1
-                    ]
-                ) >= precedence(token)
-            ) {
-
-                applyOperation();
-            }
-
-            operators.push(token);
-        }
-
-        while (operators.length) {
-            applyOperation();
-        }
-
-        const result =
-            values[0];
-
-        if (!Number.isFinite(result)) {
-            throw new Error();
-        }
-
-        resultDisplay.textContent =
-            Number.isInteger(result)
-                ? result
-                : Number(
-                    result.toFixed(10)
-                );
-
-    } catch {
-
-        errorMessage.textContent =
-            "Invalid calculation.";
-    }
-}
-
-buttons.forEach((button) => {
-
-    const value =
-        button.dataset.value;
-
-    const action =
-        button.dataset.action;
-
-    button.addEventListener(
-        "click",
-        () => {
-
-            if (value) {
-                addValue(value);
-            }
-
-            if (action === "clear") {
-                clearCalculator();
-            }
-
-            if (action === "delete") {
-                deleteLast();
-            }
-
-            if (action === "percent") {
-                calculatePercent();
-            }
-
-            if (action === "calculate") {
-                calculate();
-            }
-        }
-    );
-});
-
-document.addEventListener(
-    "keydown",
-    (event) => {
-
-        const key =
-            event.key;
-
-        if (/^[0-9.]$/.test(key)) {
-            addValue(key);
-            return;
-        }
-
-        if (
-            ["+", "-"].includes(key)
-        ) {
-            addValue(key);
-            return;
-        }
-
-        if (key === "*") {
-            addValue("×");
-            return;
-        }
-
-        if (key === "/") {
-
-            event.preventDefault();
-
-            addValue("÷");
-
-            return;
-        }
-
-        if (
-            key === "Enter" ||
-            key === "="
-        ) {
-            calculate();
-            return;
-        }
-
-        if (key === "Backspace") {
-            deleteLast();
-            return;
-        }
-
-        if (key === "Escape") {
-            clearCalculator();
-        }
-    }
+calculateButton.addEventListener(
+    "click",
+    calculateAge
 );
