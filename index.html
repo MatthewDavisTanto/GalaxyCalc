@@ -17,11 +17,7 @@
 
 <body>
 
-    <div class="background">
-        <div class="blob blob-one"></div>
-        <div class="blob blob-two"></div>
-        <div class="blob blob-three"></div>
-    </div>
+    <canvas id="galaxy"></canvas>
 
     <header class="site-header">
 
@@ -29,9 +25,14 @@
             CALC<span>.</span>
         </a>
 
-        <span class="header-label">
-            SIMPLE / FAST / CLEAN
-        </span>
+        <a
+            href="https://github.com/MatthewDavisTanto"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="github-link"
+        >
+            GITHUB ↗
+        </a>
 
     </header>
 
@@ -41,22 +42,9 @@
 
             <div class="calculator-card">
 
-                <div class="calculator-header">
-
-                    <div>
-                        <span class="calculator-label">
-                            CALCULATOR
-                        </span>
-
-                        <h1>
-                            CALC.
-                        </h1>
-                    </div>
-
-                    <span class="status">
-                        ONLINE
-                    </span>
-
+                <div class="calculator-top">
+                    <span>CALCULATOR</span>
+                    <span>01</span>
                 </div>
 
                 <div class="display">
@@ -109,17 +97,9 @@
                         ÷
                     </button>
 
-                    <button type="button" data-value="7">
-                        7
-                    </button>
-
-                    <button type="button" data-value="8">
-                        8
-                    </button>
-
-                    <button type="button" data-value="9">
-                        9
-                    </button>
+                    <button type="button" data-value="7">7</button>
+                    <button type="button" data-value="8">8</button>
+                    <button type="button" data-value="9">9</button>
 
                     <button
                         type="button"
@@ -129,17 +109,9 @@
                         ×
                     </button>
 
-                    <button type="button" data-value="4">
-                        4
-                    </button>
-
-                    <button type="button" data-value="5">
-                        5
-                    </button>
-
-                    <button type="button" data-value="6">
-                        6
-                    </button>
+                    <button type="button" data-value="4">4</button>
+                    <button type="button" data-value="5">5</button>
+                    <button type="button" data-value="6">6</button>
 
                     <button
                         type="button"
@@ -149,17 +121,9 @@
                         −
                     </button>
 
-                    <button type="button" data-value="1">
-                        1
-                    </button>
-
-                    <button type="button" data-value="2">
-                        2
-                    </button>
-
-                    <button type="button" data-value="3">
-                        3
-                    </button>
+                    <button type="button" data-value="1">1</button>
+                    <button type="button" data-value="2">2</button>
+                    <button type="button" data-value="3">3</button>
 
                     <button
                         type="button"
@@ -204,9 +168,9 @@
 
     <footer class="site-footer">
 
-        <p>
+        <span>
             © 2026 Matthew Davis Tanto
-        </p>
+        </span>
 
         <a
             href="https://github.com/MatthewDavisTanto"
