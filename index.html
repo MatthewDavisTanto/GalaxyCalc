@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>TIDE//CALC — Interactive Calculator</title>
+
+    <meta
+        name="description"
+        content="TIDE//CALC is a bright and interactive calculator built with HTML, CSS and JavaScript."
+    >
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="ocean-background">
+        <div class="wave wave-one"></div>
+        <div class="wave wave-two"></div>
+        <div class="wave wave-three"></div>
+
+        <div class="bubble bubble-one"></div>
+        <div class="bubble bubble-two"></div>
+        <div class="bubble bubble-three"></div>
+        <div class="bubble bubble-four"></div>
+    </div>
+
+    <header class="site-header">
+
+        <a href="#" class="logo">
+            TIDE<span>//</span>CALC
+        </a>
+
+        <div class="header-status">
+            INTERACTIVE MODE
+        </div>
+
+    </header>
+
+    <main>
+
+        <section class="calculator-section">
+
+            <div class="intro">
+
+                <p class="eyebrow">
+                    SESSION 05 / JAVASCRIPT
+                </p>
+
+                <h1>
+                    CALCULATE.<br>
+                    RIDE THE <span>WAVE.</span>
+                </h1>
+
+                <p class="description">
+                    A simple interactive calculator designed
+                    to perform basic arithmetic operations
+                    with instant results.
+                </p>
+
+            </div>
+
+            <div class="calculator-card">
+
+                <div class="card-top">
+
+                    <div>
+                        <p class="card-label">
+                            BASIC CALCULATOR
+                        </p>
+
+                        <h2>
+                            TIDE//01
+                        </h2>
+                    </div>
+
+                    <div class="live-dot">
+                        <span></span>
+                        LIVE
+                    </div>
+
+                </div>
+
+                <div class="input-group">
+
+                    <label for="number-one">
+                        FIRST NUMBER
+                    </label>
+
+                    <input
+                        type="number"
+                        id="number-one"
+                        placeholder="Enter a number"
+                    >
+
+                </div>
+
+                <div class="input-group">
+
+                    <label for="number-two">
+                        SECOND NUMBER
+                    </label>
+
+                    <input
+                        type="number"
+                        id="number-two"
+                        placeholder="Enter a number"
+                    >
+
+                </div>
+
+                <div class="operation-area">
+
+                    <p class="operation-label">
+                        SELECT OPERATION
+                    </p>
+
+                    <div class="operation-buttons">
+
+                        <button
+                            type="button"
+                            class="operation-button"
+                            data-operation="add"
+                        >
+                            +
+                        </button>
+
+                        <button
+                            type="button"
+                            class="operation-button"
+                            data-operation="subtract"
+                        >
+                            −
+                        </button>
+
+                        <button
+                            type="button"
+                            class="operation-button"
+                            data-operation="multiply"
+                        >
+                            ×
+                        </button>
+
+                        <button
+                            type="button"
+                            class="operation-button"
+                            data-operation="divide"
+                        >
+                            ÷
+                        </button>
+
+                    </div>
+
+                </div>
+
+                <button
+                    type="button"
+                    class="calculate-button"
+                    id="calculate-button"
+                >
+                    CALCULATE RESULT
+                </button>
+
+                <div class="result-area">
+
+                    <p class="result-label">
+                        RESULT
+                    </p>
+
+                    <output id="result">
+                        0
+                    </output>
+
+                    <p
+                        class="error-message"
+                        id="error-message"
+                    ></p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <footer class="site-footer">
+
+        <span>
+            © 2026 TIDE//CALC
+        </span>
+
+        <span>
+            HTML / CSS / JAVASCRIPT
+        </span>
+
+    </footer>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
