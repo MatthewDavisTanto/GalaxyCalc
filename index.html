@@ -5,11 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>CALC. — Calculator</title>
+    <title>GALACTIC AGE — Age Calculator</title>
 
     <meta
         name="description"
-        content="A simple interactive calculator built with HTML, CSS and JavaScript."
+        content="Calculate your age on different planets with Galactic Age."
     >
 
     <link rel="stylesheet" href="style.css">
@@ -22,7 +22,7 @@
     <header class="site-header">
 
         <a href="#" class="logo">
-            CALC<span>.</span>
+            GALACTIC<span>.</span>
         </a>
 
         <a
@@ -43,115 +43,116 @@
             <div class="calculator-card">
 
                 <div class="calculator-top">
-                    <span>CALCULATOR</span>
+                    <span>AGE CALCULATOR</span>
                     <span>01</span>
                 </div>
 
-                <div class="display">
+                <div class="calculator-intro">
 
-                    <div
-                        class="expression"
-                        id="expression"
-                    ></div>
+                    <p class="intro-label">
+                        YOUR AGE, ACROSS THE UNIVERSE
+                    </p>
+
+                    <h1>
+                        GALACTIC<br>
+                        AGE
+                    </h1>
+
+                    <p>
+                        Discover how old you would be
+                        on another planet.
+                    </p>
+
+                </div>
+
+                <div class="input-group">
+
+                    <label for="birth-date">
+                        DATE OF BIRTH
+                    </label>
+
+                    <input
+                        type="date"
+                        id="birth-date"
+                    >
+
+                </div>
+
+                <div class="input-group">
+
+                    <label for="planet">
+                        SELECT PLANET
+                    </label>
+
+                    <select id="planet">
+
+                        <option value="">
+                            Choose a planet
+                        </option>
+
+                        <option value="earth">
+                            Earth
+                        </option>
+
+                        <option value="mercury">
+                            Mercury
+                        </option>
+
+                        <option value="venus">
+                            Venus
+                        </option>
+
+                        <option value="mars">
+                            Mars
+                        </option>
+
+                        <option value="jupiter">
+                            Jupiter
+                        </option>
+
+                        <option value="saturn">
+                            Saturn
+                        </option>
+
+                        <option value="uranus">
+                            Uranus
+                        </option>
+
+                        <option value="neptune">
+                            Neptune
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <button
+                    type="button"
+                    class="calculate-button"
+                    id="calculate-button"
+                >
+                    CALCULATE AGE
+                </button>
+
+                <div class="result-area">
+
+                    <p class="result-label">
+                        YOUR GALACTIC AGE
+                    </p>
 
                     <div
                         class="result"
                         id="result"
                     >
-                        0
+                        —
                     </div>
 
-                </div>
-
-                <div class="buttons">
-
-                    <button
-                        type="button"
-                        class="function"
-                        data-action="clear"
+                    <p
+                        class="result-description"
+                        id="result-description"
                     >
-                        AC
-                    </button>
-
-                    <button
-                        type="button"
-                        class="function"
-                        data-action="delete"
-                    >
-                        DEL
-                    </button>
-
-                    <button
-                        type="button"
-                        class="function"
-                        data-action="percent"
-                    >
-                        %
-                    </button>
-
-                    <button
-                        type="button"
-                        class="operator"
-                        data-value="÷"
-                    >
-                        ÷
-                    </button>
-
-                    <button type="button" data-value="7">7</button>
-                    <button type="button" data-value="8">8</button>
-                    <button type="button" data-value="9">9</button>
-
-                    <button
-                        type="button"
-                        class="operator"
-                        data-value="×"
-                    >
-                        ×
-                    </button>
-
-                    <button type="button" data-value="4">4</button>
-                    <button type="button" data-value="5">5</button>
-                    <button type="button" data-value="6">6</button>
-
-                    <button
-                        type="button"
-                        class="operator"
-                        data-value="-"
-                    >
-                        −
-                    </button>
-
-                    <button type="button" data-value="1">1</button>
-                    <button type="button" data-value="2">2</button>
-                    <button type="button" data-value="3">3</button>
-
-                    <button
-                        type="button"
-                        class="operator"
-                        data-value="+"
-                    >
-                        +
-                    </button>
-
-                    <button
-                        type="button"
-                        class="zero"
-                        data-value="0"
-                    >
-                        0
-                    </button>
-
-                    <button type="button" data-value=".">
-                        .
-                    </button>
-
-                    <button
-                        type="button"
-                        class="equals"
-                        data-action="calculate"
-                    >
-                        =
-                    </button>
+                        Enter your birth date and select a planet.
+                    </p>
 
                 </div>
 
@@ -181,7 +182,7 @@
         </a>
 
     </footer>
-    
+
     <script src="https://cdn.jsdelivr.net/npm/three@0.138.1/build/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.138.1/examples/js/controls/OrbitControls.js"></script>
     <script src="script.js"></script>
