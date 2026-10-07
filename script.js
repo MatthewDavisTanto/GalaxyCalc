@@ -195,6 +195,8 @@ camera.position.set(
     3
 );
 
+camera.lookAt(0, 0, 0);
+
 scene.add(camera);
 
 const renderer =
