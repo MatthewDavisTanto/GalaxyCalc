@@ -1,5 +1,19 @@
 const canvas = document.getElementById("galaxy");
 
+const expressionDisplay =
+    document.getElementById("expression");
+
+const resultDisplay =
+    document.getElementById("result");
+
+const errorMessage =
+    document.getElementById("error-message");
+
+const buttons =
+    document.querySelectorAll(".buttons button");
+
+let expression = "";
+
 const scene = new THREE.Scene();
 
 const parameters = {
